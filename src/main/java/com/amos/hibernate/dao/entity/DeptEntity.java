@@ -11,32 +11,31 @@ import java.util.Set;
 
 /**
  * 模块名称: hibernate
- * 模块描述: 角色
+ * 模块描述: 部门
  *
  * @author amos.wang
- * @date 2020/8/7 22:25
+ * @date 2020/8/8 11:42
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "org_role")
-public class RoleEntity extends BaseEntity {
+@Table(name = "org_dept")
+public class DeptEntity extends BaseEntity {
 
     private String name;
 
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "org_user_role", joinColumns = {@JoinColumn(name = "role_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<UserEntity> users;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private DeptEntity parent;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "org_dept_role", joinColumns = {@JoinColumn(name = "role_id")},
-            inverseJoinColumns = {@JoinColumn(name = "dept_id")})
-    private Set<DeptEntity> depts;
+    @JoinTable(name = "org_dept_role", joinColumns = {@JoinColumn(name = "dept_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<RoleEntity> roles;
 
 
     @Override
@@ -47,7 +46,7 @@ public class RoleEntity extends BaseEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RoleEntity that = (RoleEntity) o;
+        DeptEntity that = (DeptEntity) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description);
