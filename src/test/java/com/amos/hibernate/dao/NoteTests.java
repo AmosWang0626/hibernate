@@ -35,7 +35,12 @@ public class NoteTests {
         entity.setTags("苏轼,宋代");
         entity.setCategory("苏轼诗词");
 
-        noteService.save(entity);
+        try {
+            noteService.save(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(">>>>>>>>>> " + e.getMessage());
+        }
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.amos.hibernate.core.impl;
 
 import com.amos.hibernate.common.api.CommonResponse;
-import com.amos.hibernate.core.ExceptionService;
 import com.amos.hibernate.core.NoteService;
+import com.amos.hibernate.core.NoteVersionService;
 import com.amos.hibernate.dao.entity.NoteEntity;
 import com.amos.hibernate.dao.repository.NoteRepository;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class NoteServiceImpl implements NoteService {
     @Resource
     private NoteRepository noteRepository;
     @Resource
-    private ExceptionService exceptionService;
+    private NoteVersionService noteVersionService;
 
 
     @Transactional(rollbackFor = Throwable.class)
@@ -38,9 +38,9 @@ public class NoteServiceImpl implements NoteService {
         NoteEntity entity = noteRepository.save(note);
 
         try {
-            exceptionService.runtime("抛异常啦");
+            noteVersionService.saveVersion(note);
         } catch (Exception e) {
-            LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [{}]", e.getMessage());
         }
 
         return CommonResponse.success(entity);
